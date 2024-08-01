@@ -25,7 +25,7 @@ oauth.register(
     access_token_url='https://accounts.google.com/o/oauth2/token',
     access_token_params=None,
     refresh_token_url=None,
-    redirect_uri='http://localhost:5000/authorized',
+    redirect_uri='https://ytmanage.nitishsrivastava.com/authorized', #'http://localhost:5000/authorized',
     client_kwargs={'scope': ' '.join(SCOPES)}
 )
 

@@ -25,3 +25,5 @@ http://localhost:5000
 
 2. Authorised redirect URIs
 http://localhost:5000/authorized
+
+https://ytmanage.nitishsrivastava.com/
