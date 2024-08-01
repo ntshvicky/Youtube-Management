@@ -1,0 +1,37 @@
+<h2 class="mt-4">My Comments!</h2>
+<form id="comments-form" action="{{ url_for('delete_selected_comments') }}" method="post">
+    <div class="mb-3">
+        <button type="button" class="btn btn-secondary" id="select-all">Select All</button>
+        <button type="submit" class="btn btn-danger" id="delete-selected">Delete Selected</button>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Select</th>
+            <th>Comment</th>
+            <th>Video ID</th>
+            <th>Published At</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for comment in comments %}
+        <tr>
+            <td><input type="checkbox" name="comment_ids" value="{{ comment.id }}"></td>
+            <td>{{ comment.text }}</td>
+            <td>{{ comment.video_id }}</td>
+            <td>{{ comment.published_at }}</td>
+            <td>
+                <a href="{{ url_for('delete_comment_route', comment_id=comment.id) }}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</form>
+<script>
+    document.getElementById('select-all').addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('input[name="comment_ids"]');
+        checkboxes.forEach(checkbox => checkbox.checked = true);
+    });
+</script>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #loader {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Dashboard</h1>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="#myvideos" id="nav-videos">My Videos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#mycomments" id="nav-comments">My Comments</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#mylikes" id="nav-likes">My Likes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#mysaved" id="nav-saved">My Saved</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('upload_video') }}">Upload Video</a>
+        </li>
+    </ul>
+    <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a>
+
+  
+
+<div id="loader">
+    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
+</div>
+    
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+
+
+<script>
+$(document).ready(function() {
+    $('#nav-videos').on('click', function() {
+        loadContent('my_videos');
+    });
+
+    $('#nav-comments').on('click', function() {
+        loadContent('my_comments');
+    });
+
+    $('#nav-likes').on('click', function() {
+        loadContent('my_likes');
+    });
+
+    $('#nav-saved').on('click', function() {
+        loadContent('my_saved');
+    });
+
+    function loadContent(endpoint) {
+        $('#loader').show();
+        $.ajax({
+            url: `/${endpoint}`,
+            method: 'GET',
+            success: function(data) {
+                $('#content').html(data);
+                $('#loader').hide();
+            },
+            error: function() {
+                $('#content').html('<p>Error loading content.</p>');
+                $('#loader').hide();
+            }
+        });
+    }
+
+    // Delegate click event for dynamically loaded content
+    $(document).on('submit', 'form', function(event) {
+        event.preventDefault();
+        let form = $(this);
+        let endpoint = form.attr('action');
+        $.ajax({
+            url: endpoint,
+            method: 'POST',
+            data: form.serialize(),
+            success: function(data) {
+                $('#content').html(data);
+                $('#loader').hide();
+            },
+            error: function() {
+                $('#content').html('<p>Error processing request.</p>');
+                $('#loader').hide();
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

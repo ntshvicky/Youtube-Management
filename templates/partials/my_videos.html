@@ -1,0 +1,21 @@
+<h2 class="mt-4">My Videos</h2>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for video in videos %}
+    <tr>
+        <td>{{ video.title }}</td>
+        <td>{{ video.description }}</td>
+        <td>
+            <a href="https://www.youtube.com/watch?v={{ video.id }}" class="btn btn-primary" target="_blank">View</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

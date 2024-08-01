@@ -1,0 +1,35 @@
+<h2 class="mt-4">My Saved Playlists</h2>
+<form id="saved-form" action="{{ url_for('delete_selected_saved') }}" method="post">
+    <div class="mb-3">
+        <button type="button" class="btn btn-secondary" id="select-all-saved">Select All</button>
+        <button type="submit" class="btn btn-danger" id="delete-selected-saved">Delete Selected</button>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Select</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for playlist in saved %}
+        <tr>
+            <td><input type="checkbox" name="playlist_ids" value="{{ playlist.id }}"></td>
+            <td>{{ playlist.title }}</td>
+            <td>{{ playlist.description }}</td>
+            <td>
+                <a href="https://www.youtube.com/playlist?list={{ playlist.id }}" class="btn btn-primary" target="_blank">View</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</form>
+<script>
+    document.getElementById('select-all-saved').addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('input[name="playlist_ids"]');
+        checkboxes.forEach(checkbox => checkbox.checked = true);
+    });
+</script>
