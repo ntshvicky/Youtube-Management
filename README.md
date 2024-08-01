@@ -7,6 +7,10 @@ pip install Flask Authlib google-api-python-client google-auth-httplib2 google-a
 
 pip install python-dotenv
 
+git rm -r --cached env/
+
+find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf  
+
 
 ##### setup ####
 set in https://console.cloud.google.com/ -> credentials

@@ -1,2 +1,8 @@
-.env
+# Ignore env folder
 env/
+.env
+__pycache__/
+*.pyc
+*.pyo
+instance/
+.venv/
