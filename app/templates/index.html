@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>YouTube Manager</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YouTube Manager</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body{min-height:100vh;margin:0;background:#0f172a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.hero{min-height:92vh;display:flex;align-items:center}.play{width:min(36vw,520px);aspect-ratio:16/10;border-radius:28px;background:#e62117;display:flex;align-items:center;justify-content:center;box-shadow:0 35px 90px rgba(0,0,0,.35)}.tri{width:0;height:0;border-top:58px solid transparent;border-bottom:58px solid transparent;border-left:92px solid #fff}.brand{width:52px;height:36px;border-radius:8px;background:#e62117;display:flex;align-items:center;justify-content:center}.brand:before{content:"";border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:15px solid #fff}h1{font-size:clamp(3rem,7vw,5.4rem);font-weight:800;line-height:.98}.lead{color:#e5edf6;max-width:620px}.below{background:#f4f6f8;color:#637083;padding:24px 0;font-weight:600}.btn-danger{background:#e62117;border-color:#e62117}
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1 class="mt-5">YouTube Manager</h1>
-    <a href="{{ url_for('login') }}" class="btn btn-primary">Login with Google</a>
-</div>
+<main class="hero">
+  <div class="container d-flex align-items-center justify-content-between">
+    <div>
+      {% with messages = get_flashed_messages() %}{% for message in messages %}<div class="alert alert-light">{{ message }}</div>{% endfor %}{% endwith %}
+      <div class="brand mb-4"></div>
+      <h1>YouTube<br>Manager</h1>
+      <p class="lead my-4">A focused dashboard where any signed-in YouTube user can manage uploads, comments, likes, dislikes, playlists, and video publishing through Google OAuth.</p>
+      <a href="{{ url_for('login') }}" class="btn btn-danger btn-lg">Login with Google</a>
+      <div class="mt-4"><span class="badge badge-secondary mr-2">Google OAuth</span><span class="badge badge-secondary mr-2">YouTube Data API</span><span class="badge badge-secondary">Bulk actions</span></div>
+    </div>
+    <div class="play d-none d-md-flex"><div class="tri"></div></div>
+  </div>
+</main>
+<section class="below"><div class="container">Use your own Google Cloud OAuth credentials before inviting other users.</div></section>
 </body>
 </html>
