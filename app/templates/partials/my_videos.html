@@ -1,21 +1,7 @@
-<h2 class="mt-4">My Videos</h2>
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for video in videos %}
-    <tr>
-        <td>{{ video.title }}</td>
-        <td>{{ video.description }}</td>
-        <td>
-            <a href="https://www.youtube.com/watch?v={{ video.id }}" class="btn btn-primary" target="_blank">View</a>
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<section class="panel">
+<form action="{{ url_for('delete_selected_videos') }}" method="post" data-ajax="true" data-confirm="Delete selected videos permanently?">
+  <div class="p-3 d-flex justify-content-between"><div><h2>Uploaded Videos</h2><p class="text-muted">{{ videos|length }} videos found.</p></div><div><button type="button" class="btn btn-outline-secondary btn-sm" data-select-all="video_ids">Select All</button> <button class="btn btn-danger btn-sm">Delete Selected</button></div></div>
+  <div class="table-wrap"><table class="table mb-0"><thead><tr><th>Select</th><th>Video</th><th>Description</th><th>Actions</th></tr></thead><tbody>{% for video in videos %}<tr><td><input type="checkbox" name="video_ids" value="{{ video.id }}"></td><td>{% if video.thumbnail %}<img class="thumb mr-2" src="{{ video.thumbnail }}">{% endif %}<strong>{{ video.title }}</strong><br><small>{{ video.id }}</small></td><td>{{ video.description|truncate(140) }}</td><td><a href="https://www.youtube.com/watch?v={{ video.id }}" target="_blank" class="btn btn-outline-secondary btn-sm">View</a></td></tr>{% endfor %}</tbody></table></div>
+  {% if not videos %}<div class="p-4 text-center text-muted">No uploaded videos found.</div>{% endif %}
+</form>
+</section>
