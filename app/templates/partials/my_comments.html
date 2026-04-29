@@ -1,37 +1,7 @@
-<h2 class="mt-4">My Comments!</h2>
-<form id="comments-form" action="{{ url_for('delete_selected_comments') }}" method="post">
-    <div class="mb-3">
-        <button type="button" class="btn btn-secondary" id="select-all">Select All</button>
-        <button type="submit" class="btn btn-danger" id="delete-selected">Delete Selected</button>
-    </div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Select</th>
-            <th>Comment</th>
-            <th>Video ID</th>
-            <th>Published At</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for comment in comments %}
-        <tr>
-            <td><input type="checkbox" name="comment_ids" value="{{ comment.id }}"></td>
-            <td>{{ comment.text }}</td>
-            <td>{{ comment.video_id }}</td>
-            <td>{{ comment.published_at }}</td>
-            <td>
-                <a href="{{ url_for('delete_comment_route', comment_id=comment.id) }}" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<section class="panel">
+<form action="{{ url_for('delete_selected_comments') }}" method="post" data-ajax="true" data-confirm="Delete selected comments?">
+  <div class="p-3 d-flex justify-content-between"><div><h2>{{ heading }}</h2><p class="text-muted">{{ comments|length }} accessible comments.</p></div><div><button type="button" class="btn btn-outline-secondary btn-sm" data-select-all="comment_ids">Select All</button> <button class="btn btn-danger btn-sm">Delete Selected</button></div></div>
+  <div class="table-wrap"><table class="table mb-0"><thead><tr><th>Select</th><th>Comment</th><th>Author</th><th>Video</th><th>Published</th></tr></thead><tbody>{% for comment in comments %}<tr><td><input type="checkbox" name="comment_ids" value="{{ comment.id }}"></td><td>{{ comment.text }}</td><td>{{ comment.author }}</td><td><a href="https://www.youtube.com/watch?v={{ comment.video_id }}" target="_blank">{{ comment.video_title or comment.video_id }}</a></td><td>{{ comment.published_at }}</td></tr>{% endfor %}</tbody></table></div>
+  {% if not comments %}<div class="p-4 text-center text-muted">No comments found.</div>{% endif %}
 </form>
-<script>
-    document.getElementById('select-all').addEventListener('click', function() {
-        const checkboxes = document.querySelectorAll('input[name="comment_ids"]');
-        checkboxes.forEach(checkbox => checkbox.checked = true);
-    });
-</script>
+</section>
