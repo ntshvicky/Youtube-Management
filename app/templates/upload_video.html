@@ -1,22 +1,13 @@
 {% extends "base.html" %}
-
 {% block title %}Upload Video{% endblock %}
-
 {% block content %}
-<h2 class="mt-4">Upload Video</h2>
-<form action="{{ url_for('upload_video') }}" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="title">Title:</label>
-        <input type="text" class="form-control" id="title" name="title" required>
-    </div>
-    <div class="form-group">
-        <label for="description">Description:</label>
-        <textarea class="form-control" id="description" name="description" required></textarea>
-    </div>
-    <div class="form-group">
-        <label for="video_file">Video File:</label>
-        <input type="file" class="form-control" id="video_file" name="video_file" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
+<form action="{{ url_for('upload_video') }}" method="post" enctype="multipart/form-data" class="panel p-4">
+  <h2>Upload Video</h2>
+  <div class="form-group"><label>Title</label><input class="form-control" name="title" maxlength="100" required></div>
+  <div class="form-group"><label>Description</label><textarea class="form-control" name="description" rows="5" required></textarea></div>
+  <div class="form-group"><label>Tags</label><input class="form-control" name="tags" placeholder="tutorial, vlog, update"></div>
+  <div class="form-row"><div class="form-group col-md-4"><label>Category</label><select class="custom-select" name="category_id"><option value="22">People & Blogs</option><option value="27">Education</option><option value="28">Science & Technology</option><option value="24">Entertainment</option></select></div><div class="form-group col-md-4"><label>Visibility</label><select class="custom-select" name="privacy_status"><option value="private">Private</option><option value="unlisted">Unlisted</option><option value="public">Public</option></select></div><div class="form-group col-md-4"><label>Audience</label><select class="custom-select" name="made_for_kids"><option value="false">Not made for kids</option><option value="true">Made for kids</option></select></div></div>
+  <div class="form-group"><label>Video File</label><input type="file" class="form-control-file" name="video_file" accept="video/*" required></div>
+  <button class="btn btn-danger">Upload To YouTube</button> <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
 </form>
 {% endblock %}
