@@ -1,109 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Dashboard{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        #loader {
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}YouTube Manager{% endblock %}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body{background:#f4f6f8;color:#17202a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{min-height:100vh;display:grid;grid-template-columns:250px 1fr}.side{background:#111827;color:#fff;padding:20px}.brand{font-weight:800;font-size:1.1rem;margin-bottom:20px}.nav-link{color:#dbe4ef;border-radius:8px;margin-bottom:5px}.nav-link:hover,.nav-link.active{color:#fff;background:rgba(255,255,255,.12)}.main{padding:28px}.panel{background:#fff;border:1px solid #dce2ea;border-radius:8px;box-shadow:0 12px 30px rgba(15,23,42,.06)}.table-wrap{overflow-x:auto}.thumb{width:96px;height:54px;object-fit:cover;border-radius:6px;background:#eef3f7}.btn-danger{background:#e62117;border-color:#e62117}.loader{display:none;position:fixed;right:24px;bottom:24px;background:#fff;padding:10px;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.18)}@media(max-width:800px){.shell{grid-template-columns:1fr}.side{position:relative}.main{padding:16px}}
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1 class="mt-5">Dashboard</h1>
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="#myvideos" id="nav-videos">My Videos</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#mycomments" id="nav-comments">My Comments</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#mylikes" id="nav-likes">My Likes</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#mysaved" id="nav-saved">My Saved</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('upload_video') }}">Upload Video</a>
-        </li>
-    </ul>
-    <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a>
-
-  
-
-<div id="loader">
-    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><i class="bi bi-play-btn-fill text-danger"></i> YouTube Manager</div>
+    <div class="mb-3 small">{{ channel.title if channel else 'Signed in with Google' }}</div>
+    <nav>
+      <a class="nav-link active" href="#" data-endpoint="my_videos"><i class="bi bi-camera-video"></i> Videos</a>
+      <a class="nav-link" href="#" data-endpoint="my_comments"><i class="bi bi-chat-left-text"></i> My Comments</a>
+      <a class="nav-link" href="#" data-endpoint="video_comments"><i class="bi bi-chat-dots"></i> Video Comments</a>
+      <a class="nav-link" href="#" data-endpoint="my_comment_history"><i class="bi bi-chat-square-quote"></i> Comment History</a>
+      <a class="nav-link" href="#" data-endpoint="my_likes"><i class="bi bi-hand-thumbs-up"></i> Likes</a>
+      <a class="nav-link" href="#" data-endpoint="my_dislikes"><i class="bi bi-hand-thumbs-down"></i> Dislikes</a>
+      <a class="nav-link" href="#" data-endpoint="my_playlists"><i class="bi bi-collection-play"></i> Playlists</a>
+      <a class="nav-link" href="#" data-endpoint="view_history"><i class="bi bi-clock-history"></i> History</a>
+    </nav>
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-light btn-block mt-4">Logout</a>
+  </aside>
+  <main class="main">
+    <div class="d-flex justify-content-between align-items-center mb-4"><div><h1>Manage your YouTube account</h1><p class="text-muted">Uploads, ratings, playlists, and accessible comments.</p></div><a href="{{ url_for('upload_video') }}" class="btn btn-danger">Upload Video</a></div>
+    {% with messages = get_flashed_messages() %}{% for message in messages %}<div class="alert alert-info">{{ message }}</div>{% endfor %}{% endwith %}
+    <div id="content">{% block content %}{% endblock %}</div>
+  </main>
 </div>
-    
-    <div id="content">
-        {% block content %}{% endblock %}
-    </div>
-</div>
-
-
-
+<div class="loader" id="loader"><div class="spinner-border text-danger"></div></div>
 <script>
-$(document).ready(function() {
-    $('#nav-videos').on('click', function() {
-        loadContent('my_videos');
-    });
-
-    $('#nav-comments').on('click', function() {
-        loadContent('my_comments');
-    });
-
-    $('#nav-likes').on('click', function() {
-        loadContent('my_likes');
-    });
-
-    $('#nav-saved').on('click', function() {
-        loadContent('my_saved');
-    });
-
-    function loadContent(endpoint) {
-        $('#loader').show();
-        $.ajax({
-            url: `/${endpoint}`,
-            method: 'GET',
-            success: function(data) {
-                $('#content').html(data);
-                $('#loader').hide();
-            },
-            error: function() {
-                $('#content').html('<p>Error loading content.</p>');
-                $('#loader').hide();
-            }
-        });
-    }
-
-    // Delegate click event for dynamically loaded content
-    $(document).on('submit', 'form', function(event) {
-        event.preventDefault();
-        let form = $(this);
-        let endpoint = form.attr('action');
-        $.ajax({
-            url: endpoint,
-            method: 'POST',
-            data: form.serialize(),
-            success: function(data) {
-                $('#content').html(data);
-                $('#loader').hide();
-            },
-            error: function() {
-                $('#content').html('<p>Error processing request.</p>');
-                $('#loader').hide();
-            }
-        });
-    });
-});
+function loadContent(endpoint){$('#loader').show();$.get('/'+endpoint).done(function(data){$('#content').html(data)}).fail(function(xhr){$('#content').html('<div class="panel p-4 text-danger">'+(xhr.responseText||'Error loading content')+'</div>')}).always(function(){$('#loader').hide()})}
+$('a[data-endpoint]').on('click',function(e){e.preventDefault();$('.nav-link').removeClass('active');$(this).addClass('active');loadContent($(this).data('endpoint'))});
+$(document).on('click','[data-select-all]',function(){const name=$(this).data('select-all');const boxes=$('input[name="'+name+'"]');boxes.prop('checked',boxes.filter(':checked').length!==boxes.length)});
+$(document).on('submit','form[data-ajax]',function(e){e.preventDefault();if($(this).find('input[type=checkbox]:checked').length===0)return;if(!confirm($(this).data('confirm')||'Continue?'))return;$('#loader').show();$.post($(this).attr('action'),$(this).serialize()).done(function(data){$('#content').html(data)}).always(function(){$('#loader').hide()})});
+if(!$('#content').text().trim()) loadContent('my_videos');
 </script>
 </body>
 </html>
