@@ -1,35 +1,7 @@
-<h2 class="mt-4">My Liked Videos</h2>
-<form id="likes-form" action="{{ url_for('delete_selected_likes') }}" method="post">
-    <div class="mb-3">
-        <button type="button" class="btn btn-secondary" id="select-all-likes">Select All</button>
-        <button type="submit" class="btn btn-danger" id="delete-selected-likes">Delete Selected</button>
-    </div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Select</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for video in likes %}
-        <tr>
-            <td><input type="checkbox" name="video_ids" value="{{ video.id }}"></td>
-            <td>{{ video.title }}</td>
-            <td>{{ video.description }}</td>
-            <td>
-                <a href="https://www.youtube.com/watch?v={{ video.id }}" class="btn btn-primary" target="_blank">View</a>
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<section class="panel">
+<form action="{{ url_for('clear_selected_ratings', rating_name=rating_name) }}" method="post" data-ajax="true" data-confirm="Remove selected {{ rating_name }}?">
+  <div class="p-3 d-flex justify-content-between"><div><h2>My {{ rating_name|capitalize }}</h2><p class="text-muted">{{ videos|length }} rated videos.</p></div><div><button type="button" class="btn btn-outline-secondary btn-sm" data-select-all="video_ids">Select All</button> <button class="btn btn-danger btn-sm">Remove Selected</button></div></div>
+  <div class="table-wrap"><table class="table mb-0"><thead><tr><th>Select</th><th>Video</th><th>Channel</th><th>Description</th><th>Actions</th></tr></thead><tbody>{% for video in videos %}<tr><td><input type="checkbox" name="video_ids" value="{{ video.id }}"></td><td>{% if video.thumbnail %}<img class="thumb mr-2" src="{{ video.thumbnail }}">{% endif %}<strong>{{ video.title }}</strong></td><td>{{ video.channel_title }}</td><td>{{ video.description|truncate(120) }}</td><td><a href="https://www.youtube.com/watch?v={{ video.id }}" target="_blank" class="btn btn-outline-secondary btn-sm">View</a></td></tr>{% endfor %}</tbody></table></div>
+  {% if not videos %}<div class="p-4 text-center text-muted">No {{ rating_name }} found.</div>{% endif %}
 </form>
-<script>
-    document.getElementById('select-all-likes').addEventListener('click', function() {
-        const checkboxes = document.querySelectorAll('input[name="video_ids"]');
-        checkboxes.forEach(checkbox => checkbox.checked = true);
-    });
-</script>
+</section>
